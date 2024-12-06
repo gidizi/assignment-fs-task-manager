@@ -2,5 +2,26 @@
   "name": "server",
   "version": "1.0.0",
   "main": "app.js",
-  "license": "MIT"
+  "license": "MIT",
+  "scripts": {
+    "init:local_mongo": "docker run -d --name mongodb -p 27017:27017 -v mongo_data:/data/db mongo",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "start:dev": "nodemon app.ts",
+    "start:prod": "npm run build && npm start"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.8.4",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/mongoose": "^5.11.97",
+    "@types/node": "^22.10.1",
+    "nodemon": "^3.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  }
 }
