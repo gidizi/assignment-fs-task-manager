@@ -18,8 +18,8 @@ Sorting and view task features are still missing. Note that we currently show on
 The project is written in MVC like architecture, where json http responses are replacing the traditional view component.
 
 MongoDB document database was choosed to manage the data for couple of reasons:
-1.Scalability - documentDBs are known for they scaling capabilities.
-2.Simpler project initiation - based on the mocked json
+1.Scalability - documentDBs are known for they scaling capabilities.  
+2.Simpler project initiation - based on the mocked json  
 3.Mock values didn't contained lookup tables/enums values where expected for fields as priority and status.
 This format aligns much better with MongoDb best practices.
 
@@ -44,16 +44,16 @@ General notes and todo notes are spread around the code. please consider them as
 
 
 ## App initiation
-Download docker desktop (https://www.docker.com/products/docker-desktop/)
-download node version 18 or alternatively (recommended) download nvm and run "nvm use" at the projects root
+Download docker desktop (https://www.docker.com/products/docker-desktop/)  
+Download node version 18 or alternatively (recommended) download nvm and run "nvm use" at the projects root
 
 ### Server
-navigate to the server folder
-run "npm run init:local_mongo" to start mongo container
-run "npm run start:dev" (production scripts were set but are currently failing)
+Navigate to the server folder  
+Run "npm run init:local_mongo" to start mongo container  
+Run "npm run start:dev" (production scripts were set but are currently failing)
 
 ### client
-navigate to the client folder
-run "npm run dev" (production scripts were set but are currently failing)
+Navigate to the client folder  
+Run "npm run dev" (production scripts were set but are currently failing)
 
 
