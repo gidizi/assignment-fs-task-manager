@@ -8,21 +8,17 @@ import axiosInstance from '../../API/axiosInstance';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Alert from '@mui/material/Alert';
-import { ITask } from "../../types/task"
+import { ITask, ITaskDTO } from "../../types/task"
 import Button from "@mui/material/Button";
 import { addTask, updateTask } from '../../recoilStore/taskState/tasksReducer';
 
-//todo important: add form validation
-
-//todo: get priority select options from shared enum + fix the option rendering function
-
-//todo: reuse from shared types library
+//todo important: add form validation/
 
 interface props {
     taskId?: string;
 }
 
-const filterNonITaskKeys = (obj) => {
+const filterNonITaskKeys = (obj: ITaskDTO) => {
     const allowedKeys: (keyof ITask)[] = ["title", "description", "dueDate", "status", "taskOwner", "priority", "tags"];
     return Object.fromEntries(
         Object.entries(obj).filter(([key]) => allowedKeys.includes(key as keyof ITask))
@@ -41,11 +37,10 @@ const TaskForm = ({ taskId }: props) => {
             try {
                 const currentTask = await axiosInstance.get(`/tasks/${taskId}`)
                 const resData = currentTask?.data
-                console.log("resData", resData)
                 //note: in Prod app we would have set server data dto and converter for the form required format (BO)
                 reset(resData)
             } catch (error) {
-                setError('Unexpected error has occured, please try to refresh the page ')//todo adjust
+                setError('Unexpected error has occured, please try to refresh the page ') //extract to external messages file
             }
         }
         if (taskId) fetchTask()
@@ -70,7 +65,7 @@ const TaskForm = ({ taskId }: props) => {
             setError('')
         } catch (error) {
             console.log(error)
-            //todo: get a shared type of response type for both BE and FE!
+            //todo: get a shared type of response type for both Server and Client!
             if (axios.isAxiosError(error)) {
                 setError(error.response?.data?.message?.message)
             } else {
@@ -109,6 +104,7 @@ const TaskForm = ({ taskId }: props) => {
                 />
                 <TextField
                     type="date"
+                    InputLabelProps={{ shrink: true }}
                     label="Due Date"
                     {...register("dueDate")}
                     aria-invalid={errors.dueDate ? "true" : "false"}
@@ -119,7 +115,7 @@ const TaskForm = ({ taskId }: props) => {
                 <Controller
                     name="priority"
                     control={control}
-                    defaultValue="Low" // Set an initial value to avoid uncontrolled warnings
+                    defaultValue="Low"
                     render={({ field }) => (
                         <TextField
                             select
