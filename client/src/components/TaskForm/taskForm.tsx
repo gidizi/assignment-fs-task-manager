@@ -1,15 +1,16 @@
 import { useForm, Controller } from 'react-hook-form'
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
+import { modalState, closedModalState } from '../../recoilStore/modalState';
+import { useSetRecoilState } from "recoil";
 import axiosInstance from '../../API/axiosInstance';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 
+//todo important: add form validation
 
 //todo: get priority select options from shared enum + fix the option rendering function
-//todo: take care of due date and think whether pr=localization is relevant (and should we add time)
-//todo: get potential owners
 
 //todo: reuse from shared types library
 interface ITask {
@@ -23,7 +24,7 @@ interface ITask {
 }
 
 interface props {
-    taskId: string
+    taskId?: string;
 }
 
 const filterNonITaskKeys = (obj) => {
@@ -33,8 +34,9 @@ const filterNonITaskKeys = (obj) => {
     );
 }
 
-const AddTask = ({ taskId }): props => {
+const TaskForm = ({ taskId }: props) => {
     const [error, setError] = useState('')
+    const setModal = useSetRecoilState(modalState);
     const { register, formState: { errors }, handleSubmit, control, reset } = useForm()
 
 
@@ -52,7 +54,8 @@ const AddTask = ({ taskId }): props => {
         }
         if (taskId) fetchTask()
     }, [taskId])
-    //todo: change undefined type
+
+
     const onSubmit = async (data: ITask) => {
         try {
             if (taskId) {
@@ -61,6 +64,7 @@ const AddTask = ({ taskId }): props => {
                 const filteredObject = filterNonITaskKeys(resData)
                 reset(filteredObject)
                 //todo: update store
+                setModal(closedModalState)
 
             } else {
                 const createdTask = await axiosInstance.post('/tasks', data)
@@ -80,7 +84,8 @@ const AddTask = ({ taskId }): props => {
         }
     }
     return (
-        <>
+        <div>
+            <h2>{taskId ? 'Edit Task' : 'Add Task'}</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <TextField
                     required
@@ -167,8 +172,8 @@ const AddTask = ({ taskId }): props => {
                 <input type="submit" />
                 {error && <Alert severity="error">{error}</Alert>}
             </form >
-        </>
+        </div>
     )
 }
 
-export default AddTask
+export default TaskForm
