@@ -30,11 +30,11 @@ Zod can can enhance validation capabilities for more complex scenarions, but mor
 
 ### Production related notes
 1.Creation time currently doesn't support timezones, that is according to the data format provided at the mock.
-This could cause inaccuracies when working with teams from different regions.
+This could cause inaccuracies when working with teams from different regions.  
 2.Task owners at the mock doesn't seem to repeat from one task to the other, therefore I kept this field as simple string for now without attempt to manage owner/users or allowing select/autofill at the UI.
 
 ### Unfixed bugs/issues
-1.MongoDb adds a default attribute of "_id", I couldn't replace it with "id" so far so I decided to just add incrementing "id" field to match the mock, but in practice we use the original "_id" field as identifier and specifically queries identifier.
+MongoDb adds a default attribute of "_id", I couldn't replace it with "id" so far so I decided to just add incrementing "id" field to match the mock, but in practice we use the original "_id" field as identifier and specifically queries identifier.
 
 ## Future goals
 Using a shared libary for common enums, types, validors(!) and more could be great for contract sync. unfortunately I had some technical issue with setting a monorepo in order to reuse them between server and client.
