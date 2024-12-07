@@ -1,14 +1,16 @@
 import { useForm, Controller } from 'react-hook-form'
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
-import { modalState, closedModalState } from '../../recoilStore/modalState';
+import { modalState, closedModalState } from '../../recoilStore/modalState/modalState';
 import { useSetRecoilState } from "recoil";
+import { tasksState } from '../../recoilStore/taskState/tasksState';
 import axiosInstance from '../../API/axiosInstance';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Alert from '@mui/material/Alert';
 import { ITask } from "../../types/task"
 import Button from "@mui/material/Button";
+import { addTask, updateTask } from '../../recoilStore/taskState/tasksReducer';
 
 //todo important: add form validation
 
@@ -28,8 +30,9 @@ const filterNonITaskKeys = (obj) => {
 }
 
 const TaskForm = ({ taskId }: props) => {
-    const [error, setError] = useState('')
+    const setTasks = useSetRecoilState(tasksState);
     const setModal = useSetRecoilState(modalState);
+    const [error, setError] = useState('')
     const { register, formState: { errors }, handleSubmit, control, reset } = useForm()
 
 
@@ -56,13 +59,12 @@ const TaskForm = ({ taskId }: props) => {
                 const resData = modifiedTask?.data.data
                 const filteredObject = filterNonITaskKeys(resData)
                 reset(filteredObject)
-                //todo: update store
+                updateTask(setTasks, taskId, filteredObject)
                 setModal(closedModalState)
-
             } else {
                 const createdTask = await axiosInstance.post('/tasks', data)
-                const resData = createdTask?.data
-                //todo: update store
+                const resData = createdTask?.data.data
+                addTask(setTasks, resData)
 
             }
             setError('')

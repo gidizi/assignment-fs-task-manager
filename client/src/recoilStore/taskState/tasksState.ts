@@ -1,5 +1,5 @@
 import { atom } from "recoil";
-import { ITask } from "../types/task"
+import { ITask } from "../../types/task"
 
 export const tasksState = atom<ITask[]>({
     key: "tasksState",

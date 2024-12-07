@@ -4,7 +4,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import IconButton from "@mui/material/IconButton";
 import CloseIcon from "@mui/icons-material/Close"; // MUI Close Icon
-import { modalState, closedModalState } from "../../recoilStore/modalState"; // Adjust the import path as needed
+import { modalState, closedModalState } from "../../recoilStore/modalState/modalState"; // Adjust the import path as needed
 
 const ModalComponent = () => {
     const [modal, setModal] = useRecoilState(modalState);

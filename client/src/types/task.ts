@@ -7,3 +7,8 @@ export interface ITask {
     priority: 'Low' | 'Medium' | 'High' | 'Critical';
     tags: string[];
 }
+
+export interface ITaskDTO extends ITask {
+    _id: string;
+    creationTime: Date;
+}
