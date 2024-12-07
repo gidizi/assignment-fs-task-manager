@@ -17,7 +17,7 @@ Sorting and view task features are still missing. Note that we currently show on
 ### Architecture
 The project is written in MVC like architecture, where json http responses are replacing the traditional view component.
 
-MongoDB document database was choosed to manage the data for couple of reasons:
+MongoDB document database was choosed to manage the data for couple of reasons:  
 1.Scalability - documentDBs are known for they scaling capabilities.  
 2.Simpler project initiation - based on the mocked json  
 3.Mock values didn't contained lookup tables/enums values where expected for fields as priority and status.
