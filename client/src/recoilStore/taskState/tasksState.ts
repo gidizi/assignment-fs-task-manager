@@ -1,7 +1,8 @@
 import { atom } from "recoil";
-import { ITask } from "../../types/task"
+import { ITaskDTO } from "../../types/task"
 
-export const tasksState = atom<ITask[]>({
+//in reality we would convert the dto to oour business object
+export const tasksState = atom<ITaskDTO[]>({
     key: "tasksState",
     default: [],
 });
