@@ -1,5 +1,6 @@
 import { Request, Response } from 'express'
 import { ZodError } from 'zod';
+import mongoose from 'mongoose';
 import { Task as taskModel, ITask, Task } from '../models/taskModel'
 import { taskPayload, taskPayloadWithPotentialInstanceAttrs } from "./types/types"
 
@@ -38,8 +39,8 @@ export const createTask = async (req: Request, res: Response) => {
         const newRecord = await taskModel.create(requestData)
         res.status(201).json({ success: true, data: newRecord });
     } catch (err) {
-        if (err instanceof ZodError) {
-            res.status(400).json({ success: false, message: err.errors });
+        if (err instanceof ZodError || err instanceof mongoose.Error.ValidationError) {
+            res.status(400).json({ success: false, message: err });
         } else {
             res.status(500).json({ success: false, message: 'Internal server Error' })
         }
