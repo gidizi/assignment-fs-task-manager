@@ -12,25 +12,24 @@ import Box from '@mui/material/Box';
 import { ITask, ITaskDTO } from "../../types/task"
 import Button from "@mui/material/Button";
 import { addTask, updateTask } from '../../recoilStore/taskState/tasksReducer';
+import { zodResolver } from "@hookform/resolvers/zod"
+import { taskSchema } from "./schema"
+import { z } from 'zod';
 
-//todo important: add form validation/
 
 interface props {
     taskId?: string;
 }
 
-const filterNonITaskKeys = (obj: ITaskDTO) => {
-    const allowedKeys: (keyof ITask)[] = ["title", "description", "dueDate", "status", "taskOwner", "priority", "tags"];
-    return Object.fromEntries(
-        Object.entries(obj).filter(([key]) => allowedKeys.includes(key as keyof ITask))
-    );
-}
+type TaskSchema = z.infer<typeof taskSchema>;
 
 const TaskForm = ({ taskId }: props) => {
     const setTasks = useSetRecoilState(tasksState);
     const setModal = useSetRecoilState(modalState);
     const [error, setError] = useState('')
-    const { register, formState: { errors }, handleSubmit, control, reset } = useForm()
+    const { register, formState: { errors }, handleSubmit, control, reset } = useForm<TaskSchema>({
+        resolver: zodResolver(taskSchema),
+    })
 
 
     useEffect(() => {
@@ -48,7 +47,7 @@ const TaskForm = ({ taskId }: props) => {
     }, [taskId])
 
 
-    const onSubmit = async (data: ITask) => {
+    const onSubmit = async (data: TaskSchema) => {
         try {
             if (taskId) {
                 const modifiedTask = await axiosInstance.put(`/tasks/${taskId}`, data)
@@ -98,6 +97,7 @@ const TaskForm = ({ taskId }: props) => {
                     sx={{ mb: 2 }}
                 />
                 <TextField
+                    required
                     label="Task Owner"
                     {...register("taskOwner")}
                     aria-invalid={errors.taskOwner ? "true" : "false"}
@@ -107,6 +107,7 @@ const TaskForm = ({ taskId }: props) => {
                     sx={{ mb: 2 }}
                 />
                 <TextField
+                    required
                     type="date"
                     InputLabelProps={{ shrink: true }}
                     label="Due Date"
@@ -118,6 +119,7 @@ const TaskForm = ({ taskId }: props) => {
                     sx={{ mb: 2 }}
                 />
                 <Controller
+                    required
                     name="priority"
                     control={control}
                     defaultValue="Low"
@@ -176,3 +178,10 @@ const TaskForm = ({ taskId }: props) => {
 }
 
 export default TaskForm
+
+const filterNonITaskKeys = (obj: ITaskDTO) => {
+    const allowedKeys: (keyof ITask)[] = ["title", "description", "dueDate", "status", "taskOwner", "priority", "tags"];
+    return Object.fromEntries(
+        Object.entries(obj).filter(([key]) => allowedKeys.includes(key as keyof ITask))
+    );
+}
