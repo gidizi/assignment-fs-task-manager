@@ -10,8 +10,12 @@ function App() {
     <RecoilRoot>
       <div className='app-wrapper'>
         <div className="task-manager">
-          <TasksList />
-          <TaskForm />
+          <div className='task-list-wrapper'>
+            <TasksList />
+          </div>
+          <div className='task-form-wrapper'>
+            <TaskForm />
+          </div>
         </div>
       </div>
       <ModalComponet />
