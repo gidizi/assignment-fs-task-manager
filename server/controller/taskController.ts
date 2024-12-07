@@ -13,7 +13,8 @@ import { taskPayload, taskPayloadWithPotentialInstanceAttrs } from "./types/type
 export const getAllTasks = async (req: Request, res: Response) => {
     try {
         const tasks = await taskModel.find()
-        res.status(200).json({ success: true, data: tasks })
+        const reversedTasks = tasks.reverse();
+        res.status(200).json({ success: true, data: reversedTasks })
     } catch (err) {
         res.status(500).json({ success: false, error: 'Failed to fetch tasks' })
     }
