@@ -1,62 +1,59 @@
-# Task Management Application
+##Client side
+###Architecture:
+The App was design to use react native state as much as possible, and expand it with recoil capabilites only where necessary, with a long distance between 2 components parent (as modal state), or with future vision, when we assume that there is high chance for state reusability across various componenets (task state).
+Also, we attempted to minise http calls with expected large payload, therefore after every unsafe http request, we use the reponse object to update the state and stay synced with the server. 
 
-## Background Story
-You're part of a team developing an internal Task Management Application for efficient project tracking. As a developer, your role is to create a scalable, user-friendly system that enables team members to manage tasks effectively. This project simulates a real-world development environment, allowing you to showcase your full-stack development skills.
+###Http client: 
+Using axios to manage network request, due to its simplicity with defining request infrastructure such as shared base url, and interceptors for future jwt headers automatic forwading. (both unavailable with native fetch api).
 
-![359092102-535ee090-8335-4b47-a8a0-e62200a3d1f8](https://github.com/user-attachments/assets/8de5fc9e-3926-4fb1-b98e-3543c2c8e33e)
-(a very basic sketch of a task management application for visualization)
+###Code reuseability:
+The prioratise code reusage, keeping dry principle to avoid future error and ease maintanace. i.e shared component for both adding task and editing task, shared modal across the entire project.
 
-## Task Definition
+###important missing feature:
+Sorting and view task features are still missing. Note that we currently show only top number of tasks for convenience. In addition adding loader/s and gracefuly handling errors which are not yet handled gracefuly is highly prioritised
 
-### Objective
-Your objective is to develop a full-stack Task Management Application that provides the following capabilities:
 
-- **Task Creation:** Users can create new tasks with relevant details like title, description, due date, priority, and task owner.
-- **Task Management:** The application should allow users to view, update, delete, and filter tasks based on various criteria like status, priority, and due date.
-- **Task Details View:** Users can click on a task to see more detailed information.
+##Server side
+###Architecture:
+The project is written in MVC like architecture, where json http responses are replacing the traditional view component.
 
-### Frontend Requirements
-- **Task Creation Form:** Implement a form with local state management for adding new tasks. The form should include fields for task title, description, due date, priority, and task owner.
-- **Global State Management:** Use Recoil to manage the global state of tasks, enabling operations like adding, updating, and deleting tasks.
-- **Task List:** Display tasks in a list format with options to filter and sort them based on different attributes (e.g., due date, status). Each task in the list should show only the main attributes (e.g., title, due date, priority) for a quick overview.
-- **Task Details View:** Allow users to click on a task to view its full detailed information, including all attributes of the task.
-- **Walkthrough:** Create a comprehensive walkthrough document that explains the frontend development method, architecture, key features, and how to start and use the application.
+MongoDB document database was choosed to manage the data for couple of reasons:
+1.Scalability - documentDBs are known for they scaling capabilities.
+2.Simpler project initiation - based on the mocked json
+3.Mock values didn't contained lookup tables/enums values where expected for fields as priority and status.
+This format aligns much better with MongoDb best practices.
 
-### Backend Requirements
-- **RESTful API:** Develop a RESTful API that provides CRUD (Create, Read, Update, Delete) operations for managing tasks.
-  - **GET /tasks:** Retrieve the list of tasks. Consider implementing a way to return only necessary fields for the task list view to optimize performance.
-  - **GET /tasks/:id:** Retrieve a specific task by its ID, returning all fields for the detailed view.
-  - **POST /tasks:** Create a new task.
-  - **PUT /tasks/:id:** Update an existing task.
-  - **DELETE /tasks/:id:** Delete a task by ID.
-- **MVC Structure:** Organize your code using the Model-View-Controller pattern to ensure maintainability and scalability.
-- **Walkthrough:** Include a section in your walkthrough document that explains the backend development method, architecture, and key features.
+##Schema validation
+We have decided to combined Mongoose schema validation with zod.
+Zod can can enhance validation capabilities for more complex scenarions, but more importantly zod is also a great library for frontend forms schema validation. Using the same validation system minimise potentially errors and contract mismatches.
 
-#### Initial Setup
-The project includes a mock database file containing 1,000 tasks (`tasks.json`). Your initial setup should recognize and utilize these tasks as the application's starting dataset. This will allow you to focus on implementing the application's core features right from the start.
 
-- **File:** `server/_mockDB/tasks.json`
+##Production related notes:
+1.Creation time currently doesn't support timezones, that is according to the data format provided at the mock.
+This could cause inaccuracies when working with teams from different regions.
+2.Task owners at the mock doesn't seem to repeat from one task to the other, therefore I kept this field as simple string for now without attempt to manage owner/users or allowing select/autofill at the UI.
 
-## Assignment Goals
+##Unfixed bugs/issues
+1.MongoDb adds a default attribute of "_id", I couldn't replace it with "id" so far so I decided to just add incrementing "id" field to match the mock, but in practice we use the original "_id" field as identifier and specifically queries identifier.
 
-### What You Will Be Tested On
-- **Code Quality:** We'll evaluate the clarity, efficiency, and organization of your code. Clean, readable, and well-documented code is highly valued.
-- **Frontend Skills:** Your ability to build a responsive and user-friendly interface will be tested. We'll look at how effectively you use:
-  - **Vite.js**
-  - **Recoil** for state management
-  - Either **Material-UI (MUI v5)** or **SCSS Modules** for styling
-- **Backend Skills:** We'll assess your ability to design and implement a robust RESTful API using:
-  - **Node.js** with **Express**
-  - **MVC pattern**
-- **State Management:** How well you manage and manipulate the global state with **Recoil** will be a key factor in your evaluation.
-- **Problem-Solving:** Your approach to implementing features like task filtering, sorting, and handling complex data structures will be examined.
-- **Documentation Skills:** The quality and comprehensiveness of your walkthrough document will be evaluated. This includes how well you explain the application's architecture, features, and usage instructions.
-- **Folder Structure:** Your ability to organize the project files in a logical and efficient manner.
+##Future goals-
+Using a shared libary for common enums, types, validors(!) and more could be great for contract sync. unfortunately I had some technical issue with setting a monorepo in order to reuse them between server and client.
 
-### Bonus Points
-- Handling edge cases and potential errors gracefully.
-- Providing additional features like user authentication or advanced filtering options.
-- Any other improvement that you think is relevant for this project.
+##Important note
+General notes and todo notes are spread around the code. please consider them as "backlog" tasks for a production system.
 
-## Conclusion
-This project is your opportunity to demonstrate your full-stack development capabilities in building a complete web application from scratch. It encompasses both frontend and backend aspects, allowing you to showcase your skills in creating a practical and efficient task management solution.
+
+##App initiation
+Download docker desktop (https://www.docker.com/products/docker-desktop/)
+download node version 18 or alternatively (recommended) download nvm and run "nvm use" at the projects root
+
+###Server
+navigate to the server folder
+run "npm run init:local_mongo" to start mongo container
+run "npm run start:dev" (production scripts were set but are currently failing)
+
+###client
+navigate to the client folder
+run "npm run dev" (production scripts were set but are currently failing)
+
+
