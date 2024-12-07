@@ -45,16 +45,13 @@ const TasksList = () => {
             } catch (error) {
                 console.log(error)
             }
-
-
-
         }
     };
 
     return (
         <div>
             <h2>Task manager</h2>
-            <List>
+            <List disablePadding >
                 {tasks.map((item) => (
                     <ListItem
                         key={item._id}

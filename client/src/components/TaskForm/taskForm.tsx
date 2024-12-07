@@ -8,6 +8,7 @@ import axiosInstance from '../../API/axiosInstance';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 import { ITask, ITaskDTO } from "../../types/task"
 import Button from "@mui/material/Button";
 import { addTask, updateTask } from '../../recoilStore/taskState/tasksReducer';
@@ -85,6 +86,7 @@ const TaskForm = ({ taskId }: props) => {
                     error={!!errors.title}
                     helperText={errors.title?.message?.toString() || errors.title?.type?.toString()}
                     fullWidth
+                    sx={{ mb: 2 }}
                 />
                 <TextField
                     label="Description"
@@ -93,6 +95,7 @@ const TaskForm = ({ taskId }: props) => {
                     error={!!errors.description}
                     helperText={errors.description?.message?.toString() || errors.description?.type?.toString()}
                     fullWidth
+                    sx={{ mb: 2 }}
                 />
                 <TextField
                     label="Task Owner"
@@ -101,6 +104,7 @@ const TaskForm = ({ taskId }: props) => {
                     error={!!errors.taskOwner}
                     helperText={errors.taskOwner?.message?.toString() || errors.taskOwner?.type?.toString()}
                     fullWidth
+                    sx={{ mb: 2 }}
                 />
                 <TextField
                     type="date"
@@ -111,6 +115,7 @@ const TaskForm = ({ taskId }: props) => {
                     error={!!errors.dueDate}
                     helperText={errors.dueDate?.message?.toString() || errors.dueDate?.type?.toString()}
                     fullWidth
+                    sx={{ mb: 2 }}
                 />
                 <Controller
                     name="priority"
@@ -125,6 +130,7 @@ const TaskForm = ({ taskId }: props) => {
                             aria-invalid={errors.priority ? "true" : "false"}
                             error={!!errors.priority}
                             helperText={errors.priority?.message?.toString() || errors.priority?.type?.toString()}
+                            sx={{ mb: 2 }}
                         >
                             {(["Low", "Medium", "High", "Critical"] as ITask["priority"][]).map((option) => (
                                 <MenuItem key={option} value={option}>
@@ -148,6 +154,7 @@ const TaskForm = ({ taskId }: props) => {
                             error={!!errors.status}
                             helperText={errors.status?.message?.toString() || errors.status?.type?.toString()}
                             aria-invalid={errors.status ? "true" : "false"}
+                            sx={{ mb: 2 }}
                         >
                             {(['To Do', 'In Progress', 'Completed'] as ITask["status"][]).map((option) => (
                                 <MenuItem key={option} value={option}>
@@ -157,14 +164,13 @@ const TaskForm = ({ taskId }: props) => {
                         </TextField>
                     )}
                 />
-
-
-
-                <Button type="submit" variant="contained" color="primary">
-                    Submit
-                </Button>
+                <Box sx={{ textAlign: 'center', mt: 2 }}>
+                    <Button type="submit" variant="contained" color="primary">
+                        Submit
+                    </Button>
+                </Box>
                 {error && <Alert severity="error">{error}</Alert>}
-            </form >
+            </form>
         </div>
     )
 }
