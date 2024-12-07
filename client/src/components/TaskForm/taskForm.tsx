@@ -7,21 +7,14 @@ import axiosInstance from '../../API/axiosInstance';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import Alert from '@mui/material/Alert';
+import { ITask } from "../../types/task"
+import Button from "@mui/material/Button";
 
 //todo important: add form validation
 
 //todo: get priority select options from shared enum + fix the option rendering function
 
 //todo: reuse from shared types library
-interface ITask {
-    title: string;
-    description: string;
-    dueDate: string;
-    status: 'To Do' | 'In Progress' | 'Completed';
-    taskOwner: string;
-    priority: 'Low' | 'Medium' | 'High' | 'Critical';
-    tags: string[];
-}
 
 interface props {
     taskId?: string;
@@ -169,7 +162,9 @@ const TaskForm = ({ taskId }: props) => {
 
 
 
-                <input type="submit" />
+                <Button type="submit" variant="contained" color="primary">
+                    Submit
+                </Button>
                 {error && <Alert severity="error">{error}</Alert>}
             </form >
         </div>
