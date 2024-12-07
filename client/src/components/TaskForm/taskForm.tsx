@@ -77,7 +77,7 @@ const TaskForm = ({ taskId }: props) => {
     return (
         <div>
             <h2>{taskId ? 'Edit Task' : 'Add Task'}</h2>
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit)} style={{ marginBottom: '20px' }}>
                 <TextField
                     required
                     label="Title"
@@ -169,9 +169,9 @@ const TaskForm = ({ taskId }: props) => {
                         Submit
                     </Button>
                 </Box>
-                {error && <Alert severity="error">{error}</Alert>}
             </form>
-        </div>
+            {error && <Alert severity="error">{error}</Alert>}
+        </div >
     )
 }
 
